@@ -1,4 +1,24 @@
 #!/usr/bin/make -f
+#export DH_VERBOSE = 1
+
+
+# does not seem to work here, so no debug stuff
+export DEB_BUILD_MAINT_OPTIONS=noddebs
+export LDFLAGS+=-lm -Wl,--no-as-needed
 
 %:
 	dh $@
+
+override_dh_auto_build:
+	mkdir -p tmp-build/lib tmp-build/include
+	dh_auto_build --buildsystem=makefile -- -f Makefile.sharedlibrary install
+	dh_auto_build --buildsystem=makefile -- -f Makefile.cmdline
+	cat debian/duktape.pc.in|sed "s/#TRIPLE#/$(DEB_HOST_MULTIARCH)/g" > debian/duktape.pc
+	dh_auto_build
+
+override_dh_auto_clean:
+	rm -rf tmp-build
+	rm -f duk
+	rm -f libduktaped.so.*
+	rm -f libduktape.so.*
+	dh_auto_clean

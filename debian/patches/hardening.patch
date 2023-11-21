@@ -1,0 +1,76 @@
+Author: Thorsten Alteholz <debian@alteholz.de>
+Description: add hardening flags
+Index: duktape-2.7.0/Makefile.cmdline
+===================================================================
+--- duktape-2.7.0.orig/Makefile.cmdline	2022-02-21 18:33:20.181616748 +0000
++++ duktape-2.7.0/Makefile.cmdline	2022-02-21 18:33:20.173616199 +0000
+@@ -12,7 +12,9 @@
+ CC := $(CC)
+ CCOPTS = -Os -pedantic -std=c99 -Wall -fstrict-aliasing -fomit-frame-pointer
+ CCOPTS += -I./examples/cmdline -I./src   # duktape.h and duk_config.h must be in include path
++CCOPTS += -fPIE -D_FORTIFY_SOURCE=2 -g
+ CCLIBS = -lm
++CCLIBS += -z relro -z now
+ 
+ # Enable print() and alert() for command line using an optional extra module.
+ CCOPTS += -DDUK_CMDLINE_PRINTALERT_SUPPORT -I./extras/print-alert
+Index: duktape-2.7.0/Makefile.sharedlibrary
+===================================================================
+--- duktape-2.7.0.orig/Makefile.sharedlibrary	2022-02-21 18:33:20.181616748 +0000
++++ duktape-2.7.0/Makefile.sharedlibrary	2022-02-21 18:39:10.325637368 +0000
+@@ -47,7 +47,7 @@
+ endif
+ 
+ # Change to actual path for actual distribution packaging.
+-INSTALL_PREFIX ?= /usr/local
++INSTALL_PREFIX ?= ./tmp-build
+ INSTALL_PREFIX := $(INSTALL_PREFIX)
+ DESTDIR ?=
+ DESTDIR := $(DESTDIR)
+@@ -63,18 +63,20 @@
+ CC := $(CC)
+ 
+ .PHONY: all
+-all: libduktape.$(SO_REALNAME_SUFFIX) libduktaped.$(SO_REALNAME_SUFFIX) duktape.pc
++all: libduktape.$(SO_SONAME_SUFFIX) libduktaped.$(SO_SoNAME_SUFFIX) duktape.pc
+ 
+ # If the default duk_config.h is not suitable for the distribution, modify it
+ # before compiling the shared library and copy the same, edited duk_config.h
+ # to $INSTALL_PREFIX/include on installation.
+ 
+-libduktape.$(SO_REALNAME_SUFFIX):
++libduktape.$(SO_SONAME_SUFFIX):
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -shared -fPIC -Wall -Wextra -Os -Wl,$(LD_SONAME_ARG),libduktape.$(SO_SONAME_SUFFIX) \
++		-D_FORTIFY_SOURCE=2 -z relro -z now \
+ 		-o $@ $(DUKTAPE_SRCDIR)/duktape.c
+ 
+-libduktaped.$(SO_REALNAME_SUFFIX):
++libduktaped.$(SO_SONAME_SUFFIX):
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -shared -fPIC -g -Wall -Wextra -Os -Wl,$(LD_SONAME_ARG),libduktaped.$(SO_SONAME_SUFFIX) \
++		-D_FORTIFY_SOURCE=2 -z relro -z now \
+ 		-o $@ $(DUKTAPE_SRCDIR)/duktape.c
+ 
+ duktape.pc:
+@@ -86,15 +88,16 @@
+ 
+ # Symlinks depend on platform conventions.
+ .PHONY: install
+-install: libduktape.$(SO_REALNAME_SUFFIX) libduktaped.$(SO_REALNAME_SUFFIX) duktape.pc
++install: libduktape.$(SO_SONAME_SUFFIX) libduktaped.$(SO_SONAME_SUFFIX) duktape.pc
+ 	mkdir -p $(DESTDIR)$(INSTALL_PREFIX)$(LIBDIR)/pkgconfig
+ 	cp $+ $(DESTDIR)$(INSTALL_PREFIX)$(LIBDIR)/
+-	rm -f $(DESTDIR)$(INSTALL_PREFIX)$(LIBDIR)/libduktape.so $(DESTDIR)$(INSTALL_PREFIX)$(LIBDIR)/libduktape.$(SO_SONAME_SUFFIX)
+-	ln -s libduktape.$(SO_REALNAME_SUFFIX) $(DESTDIR)$(INSTALL_PREFIX)$(LIBDIR)/libduktape.so
+-	ln -s libduktape.$(SO_REALNAME_SUFFIX) $(DESTDIR)$(INSTALL_PREFIX)$(LIBDIR)/libduktape.$(SO_SONAME_SUFFIX)
++	rm -f $(INSTALL_PREFIX)/lib/libduktape.so
++	ln -s libduktape.$(SO_SONAME_SUFFIX) $(INSTALL_PREFIX)/lib/libduktape.so
++#	ln -s libduktape.$(SO_REALNAME_SUFFIX) $(INSTALL_PREFIX)/lib/libduktape.$(SO_SONAME_SUFFIX)
++
+ 	rm -f $(DESTDIR)$(INSTALL_PREFIX)$(LIBDIR)/libduktaped.so $(DESTDIR)$(INSTALL_PREFIX)$(LIBDIR)/libduktaped.$(SO_SONAME_SUFFIX)
+-	ln -s libduktaped.$(SO_REALNAME_SUFFIX) $(DESTDIR)$(INSTALL_PREFIX)$(LIBDIR)/libduktaped.so
+-	ln -s libduktaped.$(SO_REALNAME_SUFFIX) $(DESTDIR)$(INSTALL_PREFIX)$(LIBDIR)/libduktaped.$(SO_SONAME_SUFFIX)
++	ln -s libduktaped.$(SO_SONAME_SUFFIX) $(INSTALL_PREFIX)/lib/libduktaped.so
++#	ln -s libduktaped.$(SO_REALNAME_SUFFIX) $(INSTALL_PREFIX)/lib/libduktaped.$(SO_SONAME_SUFFIX)
+ 	mv $(DESTDIR)$(INSTALL_PREFIX)$(LIBDIR)/duktape.pc $(DESTDIR)$(INSTALL_PREFIX)$(LIBDIR)/pkgconfig/
+ 	mkdir -p $(DESTDIR)$(INSTALL_PREFIX)/include/
+ 	cp $(DUKTAPE_SRCDIR)/duktape.h $(DUKTAPE_SRCDIR)/duk_config.h $(DESTDIR)$(INSTALL_PREFIX)/include/
