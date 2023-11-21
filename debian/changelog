@@ -1,5 +1,137 @@
-template-repository (1.0-1) unstable; urgency=medium
+duktape (2.7.0-2) unstable; urgency=medium
 
-  * Initial release
+  * add -lm to LDFLAGS for libduktape
+    (Closes: #1031801)
 
- -- Tsic404 <liuheng@deepin.org>  Sat, 28 Jan 2023 13:46:49 +0800
+ -- Thorsten Alteholz <debian@alteholz.de>  Sat, 25 Feb 2023 12:31:54 +0100
+
+duktape (2.7.0-1) unstable; urgency=medium
+
+  * New upstream release
+  * debian/control: set standard to 4.6.0 (no changes)
+  * debian/control: set Rules-Requires-Root:
+
+ -- Thorsten Alteholz <debian@alteholz.de>  Mon, 21 Feb 2022 18:31:54 +0000
+
+duktape (2.6.0-2) unstable; urgency=medium
+
+  * upload to unstable
+  * debian/control: set standard to 4.5.1 (no changes)
+
+ -- Thorsten Alteholz <debian@alteholz.de>  Wed, 18 Aug 2021 19:26:34 +0200
+
+duktape (2.6.0-1) experimental; urgency=medium
+
+  * New upstream release
+  * debian/control: soname bump
+  * debian/control: use dh13
+
+ -- Thorsten Alteholz <debian@alteholz.de>  Fri, 06 Aug 2021 23:36:04 +0200
+
+duktape (2.5.0-2) unstable; urgency=medium
+
+  * debian/copyright: update file (Closes: #951903)
+  * debian/control: set standard to 4.5.0 (no changes)
+
+  [janitor]
+  * Use secure URI in Homepage field.
+  * Bump debhelper from old 11 to 12.
+  * Set debhelper-compat version in Build-Depends.
+  * Update standards version to 4.4.1, no changes needed.
+
+ -- Thorsten Alteholz <debian@alteholz.de>  Sat, 14 Mar 2020 16:44:16 +0100
+
+duktape (2.5.0-1) unstable; urgency=medium
+
+  * New upstream release
+
+ -- Thorsten Alteholz <debian@alteholz.de>  Sun, 08 Dec 2019 23:26:57 +0000
+
+duktape (2.4.0-2) unstable; urgency=medium
+
+  * Fix FTCBFS: Let dh_auto_build pass cross tools to make.
+    Thanks to Helmut Grohne for the patch.
+    (Closes: #926608)
+
+ -- Thorsten Alteholz <debian@alteholz.de>  Sun, 06 Oct 2019 19:12:02 +0200
+
+duktape (2.4.0-1) unstable; urgency=medium
+
+  * New upstream release
+  * debian/control: new soname
+  * debian/control: set standard to 4.3.0 (no changes)
+  * add debian/salsa-ci.yml
+
+ -- Thorsten Alteholz <debian@alteholz.de>  Sat, 10 Aug 2019 19:12:02 +0200
+
+duktape (2.3.0-1) unstable; urgency=medium
+
+  * New upstream release
+  * add symbols file
+  * add debug symbols for dbg package
+
+ -- Thorsten Alteholz <debian@alteholz.de>  Tue, 14 Aug 2018 22:12:45 +0200
+
+duktape (2.2.1-1) unstable; urgency=medium
+
+  * New upstream release
+  * debian/control: set standard to 4.1.5 (no changes)
+  * debian/control: use dh11
+  * debian/control: use salsa URLs
+
+ -- Thorsten Alteholz <debian@alteholz.de>  Sat, 07 Jul 2018 10:52:52 +0200
+
+duktape (2.2.0-3) unstable; urgency=medium
+
+  * add pkg-config file (Closes: #882379)
+
+ -- Thorsten Alteholz <debian@alteholz.de>  Fri, 24 Nov 2017 19:23:21 +0200
+
+duktape (2.2.0-2) unstable; urgency=medium
+
+  * add correct library link to dev-package (Closes: #879858)
+
+ -- Thorsten Alteholz <debian@alteholz.de>  Thu, 26 Oct 2017 19:23:21 +0200
+
+duktape (2.2.0-1) unstable; urgency=medium
+
+  * New upstream release
+  * debian/control: set standard to 4.1.1 (no changes)
+  * debian/control: use dh10
+  * add library package (Closes: #872040)
+
+ -- Thorsten Alteholz <debian@alteholz.de>  Wed, 25 Oct 2017 19:16:35 +0200
+
+duktape (2.1.1-1) unstable; urgency=medium
+
+  * New upstream release
+  * debian/control: set standard to 4.0.1 (no changes)
+  * debian/rules: replace DH_BUILD_OPTIONS by DH_BUILD_MAINT_OPTIONS
+
+ -- Thorsten Alteholz <debian@alteholz.de>  Sun, 13 Aug 2017 20:03:07 +0200
+
+duktape (2.0.0-1) unstable; urgency=medium
+
+  * New upstream release
+
+ -- Thorsten Alteholz <debian@alteholz.de>  Tue, 24 Jan 2017 19:12:39 +0100
+
+duktape (1.6.0-1) unstable; urgency=medium
+
+  * new upstream version
+  * debian/control: add VCS URLs
+
+ -- Thorsten Alteholz <debian@alteholz.de>  Mon, 12 Dec 2016 18:30:11 +0100
+
+duktape (1.5.1-1) unstable; urgency=medium
+
+  * new upstream version
+  * debian/control: move maintainer to debian-iot-team
+
+ -- Thorsten Alteholz <debian@alteholz.de>  Sat, 15 Oct 2016 11:30:11 +0200
+
+duktape (1.5.0-1) unstable; urgency=medium
+
+  * Initial release (Closes: #827773)
+
+ -- Thorsten Alteholz <debian@alteholz.de>  Mon, 20 Jun 2016 21:26:11 +0200

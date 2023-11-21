@@ -1,0 +1,4 @@
+The directory src contains a combintaion of all source files from src-separate into duktape.c.
+This combination can be done with the script combine_src.py[1] from the upstream repository.
+
+[1]https://github.com/svaarala/duktape/blob/master/util/combine_src.py
